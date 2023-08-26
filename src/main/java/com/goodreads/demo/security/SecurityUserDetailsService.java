@@ -1,5 +1,7 @@
 package com.goodreads.demo.security;
 
+import com.goodreads.demo.dto.UserDTO;
+import com.goodreads.demo.entities.users.User;
 import com.goodreads.demo.repositories.AdministratorRepository;
 import com.goodreads.demo.repositories.AuthorRepository;
 import com.goodreads.demo.repositories.ReaderRepository;
@@ -19,24 +21,28 @@ public class SecurityUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) {
-        var administrator = administratorRepository.findByEmail(email);
+        User user = findUserByEmail(email);
 
-        if (administrator.isPresent()) {
-            return new SecurityUserDetails(administrator.get());
-        }
-
-        var author = authorRepository.findByEmail(email);
-
-        if (author.isPresent()) {
-            return new SecurityUserDetails(author.get());
-        }
-
-        var reader = readerRepository.findByEmail(email);
-
-        if (reader.isPresent()) {
-            return new SecurityUserDetails(reader.get());
+        if (user != null) {
+            UserDTO userDTO = new UserDTO(user.getPassword(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getRole());
+            return new SecurityUserDetails(userDTO);
         }
 
         throw new UsernameNotFoundException("User not found with email: " + email);
+    }
+
+    private User findUserByEmail(String email) {
+        var administrator = administratorRepository.findByEmail(email);
+        if (administrator.isPresent()) {
+            return administrator.get();
+        }
+
+        var author = authorRepository.findByEmail(email);
+        if (author.isPresent()) {
+            return author.get();
+        }
+
+        var reader = readerRepository.findByEmail(email);
+        return reader.orElse(null);
     }
 }

@@ -17,7 +17,7 @@ public class UserService {
     public UserDTO createUser(RegisterRequest registerRequest) {
         UserCreationService creationService = userCreationServiceFactory.getServiceForRole(registerRequest.role());
         var user = creationService.createUser(registerRequest);
-        return new UserDTO(user.getPassword(), user.getEmail(), user.getFirstName(), user.getLastName());
+        return new UserDTO(user.getPassword(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getRole());
     }
 
     public void login(LoginRequest loginRequest) {
