@@ -21,7 +21,7 @@ public class Reader extends User {
     @Enumerated(EnumType.STRING)
     private final Role role = Role.READER;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
         name = "readers_books",
         joinColumns = @JoinColumn(name = "reader_id"),
@@ -29,7 +29,7 @@ public class Reader extends User {
     )
     private List<Book> readBooks = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
         name = "readers_wishlist",
         joinColumns = @JoinColumn(name = "reader_id"),
@@ -37,6 +37,10 @@ public class Reader extends User {
     )
     private List<Book> wishList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "reviewAuthor")
+    @OneToMany(mappedBy = "reviewAuthor", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
+
+    public Reader(int id, String email, String password, String firstName, String lastName) {
+        super(id, email, password, firstName, lastName);
+    }
 }

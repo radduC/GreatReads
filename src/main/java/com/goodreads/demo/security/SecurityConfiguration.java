@@ -1,5 +1,6 @@
 package com.goodreads.demo.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -17,7 +18,10 @@ import static jakarta.servlet.DispatcherType.FORWARD;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration {
+
+    private final SecurityUserDetailsService securityUserDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -28,12 +32,13 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.httpBasic(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
+            .userDetailsService(securityUserDetailsService)
             .authorizeHttpRequests(requests -> requests
                 .dispatcherTypeMatchers(FORWARD, ERROR).permitAll()
-                .requestMatchers("/register", "/login", "/logout").permitAll()
+                .requestMatchers("/", "/register").anonymous()
                 .anyRequest().authenticated())
-            .formLogin(Customizer.withDefaults());
-
+//            .formLogin(Customizer.withDefaults())
+        ;
 
         return http.build();
     }

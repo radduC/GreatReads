@@ -18,4 +18,8 @@ public class Administrator extends User {
 
     @Enumerated(EnumType.STRING)
     private final Role role = Role.ADMINISTRATOR;
+
+    public Administrator(int id, String email, String password, String firstName, String lastName) {
+        super(id, email, password, firstName, lastName);
+    }
 }

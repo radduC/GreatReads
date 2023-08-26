@@ -22,4 +22,8 @@ public class Author extends User {
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Book> publishedBooks = new ArrayList<>();
+
+    public Author(int id, String email, String password, String firstName, String lastName) {
+        super(id, email, password, firstName, lastName);
+    }
 }
