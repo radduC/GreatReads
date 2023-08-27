@@ -5,7 +5,7 @@ import com.goodreads.demo.dto.UserDTO;
 import com.goodreads.demo.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,7 +15,7 @@ public class RegisterController {
 
     private final UserService userService;
 
-    @GetMapping("/register")
+    @PostMapping("/register")
     public UserDTO register(@RequestBody @Valid RegisterRequest registerRequest) {
         return userService.createUser(registerRequest);
     }

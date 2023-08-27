@@ -1,9 +1,7 @@
 package com.goodreads.demo.services;
 
 import com.goodreads.demo.dto.RegisterRequest;
-import com.goodreads.demo.entities.users.Author;
 import com.goodreads.demo.enums.Role;
-import com.goodreads.demo.repositories.AuthorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,7 +21,7 @@ import static org.mockito.Mockito.when;
 class AuthorCreationServiceTest {
 
     @Autowired
-    private AuthorCreationService authorCreationService;
+    private AuthorPersistService authorCreationService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;

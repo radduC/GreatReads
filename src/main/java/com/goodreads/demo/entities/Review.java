@@ -1,16 +1,15 @@
 package com.goodreads.demo.entities;
 
-import com.goodreads.demo.entities.users.Reader;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "reviews")
-@Getter
-@Setter
+@Data
+@Builder
 public class Review {
 
     @Id
@@ -22,8 +21,8 @@ public class Review {
     private String comment;
 
     @ManyToOne
-    @JoinColumn(name = "reader_id")
-    private Reader reviewAuthor;
+    @JoinColumn(name = "user_id")
+    private User reviewAuthor;
 
     private LocalDateTime publishedTimestamp;
 }

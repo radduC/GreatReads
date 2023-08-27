@@ -2,7 +2,9 @@ package com.goodreads.demo.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.goodreads.demo.enums.Role;
+import lombok.Builder;
 
+@Builder
 public record UserDTO(
     @JsonIgnore
     String password,

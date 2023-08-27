@@ -1,5 +1,7 @@
 package com.goodreads.demo.aspects;
 
+import com.goodreads.demo.exceptions.IdenticalEmailException;
+import com.goodreads.demo.exceptions.UserAlreadyExistsException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +32,6 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<Object> handleUsernameNotFoundException(UsernameNotFoundException e) {
         Map<String, String> body = new HashMap<>();
-
         String error = e.getMessage();
         body.put("error", error);
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
@@ -39,7 +40,22 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<?> handleAuthenticationException(AuthenticationException e) {
         Map<String, String> body = new HashMap<>();
+        String error = e.getMessage();
+        body.put("error", error);
+        return ResponseEntity.badRequest().body(body);
+    }
 
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<?> handleUserAlreadyExistsException(UserAlreadyExistsException e) {
+        Map<String, String> body = new HashMap<>();
+        String error = e.getMessage();
+        body.put("error", error);
+        return ResponseEntity.badRequest().body(body);
+    }
+
+    @ExceptionHandler(IdenticalEmailException.class)
+    public ResponseEntity<?> handleIdenticalEmailException(IdenticalEmailException e) {
+        Map<String, String> body = new HashMap<>();
         String error = e.getMessage();
         body.put("error", error);
         return ResponseEntity.badRequest().body(body);
