@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -39,6 +40,7 @@ public class UserService {
 
         return UserDTO.builder()
             .email(result.getEmail())
+            .password(result.getPassword())
             .firstName(result.getFirstName())
             .lastName(result.getLastName())
             .role(result.getRole())
@@ -46,11 +48,11 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO changeEmail(String username, String newEmail) {
+    public UserDTO changeEmail(String currentEmail, String newEmail) {
         newEmail = newEmail.toLowerCase();
 
-        if (username.equalsIgnoreCase(newEmail)) {
-            throw new IdenticalEmailException("the new email is identical to the old one!");
+        if (currentEmail.equalsIgnoreCase(newEmail)) {
+            throw new IdenticalEmailException("The new email is identical to the old one!");
         }
 
         var checkNewEmail = userRepository.findByEmail(newEmail);
@@ -59,18 +61,18 @@ public class UserService {
             throw new UserAlreadyExistsException("User already exists with email: " + newEmail);
         }
 
-        var user = userRepository.findByEmail(username).orElseThrow(
-            () -> new UsernameNotFoundException("User not found with email: " + username)
+        var user = userRepository.findByEmail(currentEmail).orElseThrow(
+            () -> new UsernameNotFoundException("User not found with email: " + currentEmail)
         );
 
         user.setEmail(newEmail);
-        var result = userRepository.save(user);
 
         return UserDTO.builder()
-            .email(result.getEmail())
-            .firstName(result.getFirstName())
-            .lastName(result.getLastName())
-            .role(result.getRole())
+            .email(user.getEmail())
+            .password(user.getPassword())
+            .firstName(user.getFirstName())
+            .lastName(user.getLastName())
+            .role(user.getRole())
             .build();
     }
 }
