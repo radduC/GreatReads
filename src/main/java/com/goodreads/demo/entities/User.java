@@ -1,6 +1,5 @@
 package com.goodreads.demo.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.goodreads.demo.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,7 +23,6 @@ public class User {
 
     private String email;
 
-    @JsonIgnore
     private String password;
 
     @Column(name = "first_name")
@@ -35,6 +33,11 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    private boolean accountEnabled;
+    private boolean accountNonLocked;
+    private boolean accountNonExpired;
+    private boolean credentialsNonExpired;
 
     public User(String email, String password, String firstName, String lastName, Role role) {
         this.email = email;

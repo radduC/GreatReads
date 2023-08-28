@@ -34,6 +34,10 @@ public class UserService {
             .firstName(registerRequest.firstName())
             .lastName(registerRequest.lastName())
             .role(registerRequest.role())
+            .accountNonLocked(true)
+            .accountEnabled(true)
+            .accountNonExpired(true)
+            .credentialsNonExpired(true)
             .build();
 
         var result = userRepository.save(user);
@@ -44,11 +48,23 @@ public class UserService {
             .firstName(result.getFirstName())
             .lastName(result.getLastName())
             .role(result.getRole())
+            .accountNonLocked(result.isAccountNonLocked())
+            .accountEnabled(result.isAccountEnabled())
+            .accountNonExpired(result.isAccountNonExpired())
+            .credentialsNonExpired(result.isCredentialsNonExpired())
             .build();
     }
 
     @Transactional
-    public UserDTO changeEmail(String currentEmail, String newEmail) {
+    public void setAccountNonLockValue(String email, boolean lockValue) {
+        var user = userRepository.findByEmail(email).orElseThrow(
+            () -> new UsernameNotFoundException("User not found with email: " + email));
+
+        user .setAccountNonLocked(lockValue);
+    }
+
+    @Transactional
+    public void changeEmail(String currentEmail, String newEmail) {
         newEmail = newEmail.toLowerCase();
 
         if (currentEmail.equalsIgnoreCase(newEmail)) {
@@ -62,17 +78,8 @@ public class UserService {
         }
 
         var user = userRepository.findByEmail(currentEmail).orElseThrow(
-            () -> new UsernameNotFoundException("User not found with email: " + currentEmail)
-        );
+            () -> new UsernameNotFoundException("User not found with email: " + currentEmail));
 
         user.setEmail(newEmail);
-
-        return UserDTO.builder()
-            .email(user.getEmail())
-            .password(user.getPassword())
-            .firstName(user.getFirstName())
-            .lastName(user.getLastName())
-            .role(user.getRole())
-            .build();
     }
 }

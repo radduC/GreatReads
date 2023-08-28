@@ -27,21 +27,21 @@ public record SecurityUserDetails(UserDTO user) implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return user.accountNonExpired();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return user().accountNonLocked();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return user.credentialsNonExpired();
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.accountEnabled();
     }
 }

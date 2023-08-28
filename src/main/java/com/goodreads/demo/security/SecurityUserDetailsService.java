@@ -20,7 +20,9 @@ public class SecurityUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email).orElse(null);
 
         if (user != null) {
-            UserDTO userDTO = new UserDTO(user.getPassword(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getRole());
+            UserDTO userDTO = new UserDTO(user.getPassword(), user.getEmail(), user.getFirstName(),
+                user.getLastName(), user.getRole(), user.isAccountEnabled(),
+                user.isAccountNonLocked(), user.isAccountNonExpired(), user.isCredentialsNonExpired());
             return new SecurityUserDetails(userDTO);
         }
 

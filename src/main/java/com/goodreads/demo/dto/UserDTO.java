@@ -11,6 +11,10 @@ public record UserDTO(
     String email,
     String firstName,
     String lastName,
-    Role role
+    Role role,
+    Boolean accountEnabled,
+    Boolean accountNonLocked,
+    Boolean accountNonExpired,
+    Boolean credentialsNonExpired
 ) {
 }
