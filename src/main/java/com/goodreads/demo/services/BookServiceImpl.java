@@ -1,6 +1,8 @@
 package com.goodreads.demo.services;
 
+import com.goodreads.demo.dto.BookDTO;
 import com.goodreads.demo.entities.Book;
+import com.goodreads.demo.entities.User;
 import com.goodreads.demo.repositories.BookRepository;
 import com.goodreads.demo.specification.BookSpecifications;
 import jakarta.transaction.Transactional;
@@ -17,14 +19,17 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
 
     @Override
-    public Page<Book> getAllBooks(String genre, Pageable pageable) {
+    public Page<BookDTO> getAllBooks(String genre, Pageable pageable) {
         Specification<Book> specification = BookSpecifications.hasGenre(genre);
-        return bookRepository.findAll(specification, pageable);
+        Page<Book> books = bookRepository.findAll(specification, pageable);
+        return books.map(BookDTO::new);
     }
 
     @Override
     @Transactional
     public void addBook(Book book) {
-        bookRepository.save(book);
+        User author = book.getAuthor();
+        author.getPublishedBooks().add(book);
+//        bookRepository.save(book);
     }
 }

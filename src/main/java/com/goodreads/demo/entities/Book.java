@@ -25,7 +25,6 @@ public class Book {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private User author;
 
     private String genre;

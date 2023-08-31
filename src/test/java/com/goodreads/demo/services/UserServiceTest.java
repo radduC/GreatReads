@@ -141,13 +141,13 @@ class UserServiceTest {
         when(userRepository.findByEmail(newEmail.toLowerCase())).thenReturn(Optional.empty());
         when(userRepository.save(existingUser)).thenReturn(existingUserUpdated);
 
-        var result = userService.changeEmail(currentEmail, newEmail);
-        assertNotNull(result);
+        userService.changeEmail(currentEmail, newEmail);
+
         assertTrue(passwordEncoder.matches("321", existingUserUpdated.getPassword()));
-        assertEquals(existingUserUpdated.getEmail(), result.email());
-        assertEquals(existingUserUpdated.getRole(), result.role());
-        assertEquals(existingUserUpdated.getFirstName(), result.firstName());
-        assertEquals(existingUserUpdated.getLastName(), result.lastName());
-        assertEquals(existingUserUpdated.getPassword(), result.password());
+        assertEquals(existingUserUpdated.getEmail(), existingUser.getEmail());
+        assertEquals(existingUserUpdated.getRole(), existingUser.getRole());
+        assertEquals(existingUserUpdated.getFirstName(), existingUser.getFirstName());
+        assertEquals(existingUserUpdated.getLastName(), existingUser.getLastName());
+        assertEquals(existingUserUpdated.getPassword(), existingUser.getPassword());
     }
 }

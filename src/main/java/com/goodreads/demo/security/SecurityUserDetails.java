@@ -1,14 +1,22 @@
 package com.goodreads.demo.security;
 
 import com.goodreads.demo.dto.UserDTO;
+import com.goodreads.demo.entities.User;
+import com.goodreads.demo.repositories.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Collection;
 import java.util.List;
 
-public record SecurityUserDetails(UserDTO user) implements UserDetails {
+public record SecurityUserDetails(UserDTO user, UserRepository userRepository) implements UserDetails {
+
+    public User getUserEntity() {
+        return userRepository.findByEmail(user.email()).orElseThrow(
+                () -> new UsernameNotFoundException("User not found"));
+    }
 
     @Override
     public String getUsername() {
