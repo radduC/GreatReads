@@ -44,7 +44,6 @@ public class UserService {
 
         return UserDTO.builder()
             .email(result.getEmail())
-            .password(result.getPassword())
             .firstName(result.getFirstName())
             .lastName(result.getLastName())
             .role(result.getRole())
